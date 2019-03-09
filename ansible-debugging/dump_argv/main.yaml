@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - name: store the called arguments
+      dump_argv:
+
+    - name: now dump it
+      debug:
+        var: argv
