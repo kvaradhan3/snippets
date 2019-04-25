@@ -13,6 +13,15 @@
     
 - The above script also shows how to use the ansible debug plugin, more details of which are here:  https://docs.ansible.com/ansible/latest/modules/debug_module.html
 
+- To see what information is available, try the following in a play:
+
+  - debug: var=ansible_facts
+
+- To see the ‘raw’ information as gathered:
+
+  % ansible hostname -m setup
+
+
 - Finally, this
   https://stackoverflow.com/questions/42417079/how-to-debug-ansible-issues
   is a good resource for ansible debug tips.
