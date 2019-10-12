@@ -61,9 +61,17 @@ def splitAndWriteChunks(xmlbuffer):
     # skip plist
     root = root.getchildren()[0]
     for i in root.getchildren():
-        var = _parse(i)
-        version  = ''.join(var['_versionInfo'].keys())
-        with open(f'/tmp/{version}', 'w') as f:
+        #
+        #      	<key>_versionInfo</key>
+	#	<dict>
+	#		<key>com.apple.SystemProfiler.SPParallelATAReporter</key>
+	#		<string>2.7</string>
+	#	</dict>
+        #
+        versionInfo = i.xpath('.//key[text()="_versionInfo"]')[0]
+        versionName = versionInfo.getnext().getchildren()[0].text
+        print(f'>>>>  {versionName}')
+        with open(f'/tmp/{versionName}', 'w') as f:
             print(etree.tostring(i).decode('utf-8'), file=f)
     return
 
@@ -100,7 +108,7 @@ def _formatApplicationsReport(name, version, has64bIntelCode,
     return s
 
 def printApplicationsReport(sp):
-    """Print the 64b status of every application on the device."
+    """Print the 64b status of every application on the device."""
     print(_formatApplicationsReport('Name', 'Version', '64b',
                                     'Path', 'Last Modified'))
     for i in sp['_items']:
