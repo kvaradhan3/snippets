@@ -70,7 +70,6 @@ def splitAndWriteChunks(xmlbuffer):
         #
         versionInfo = i.xpath('.//key[text()="_versionInfo"]')[0]
         versionName = versionInfo.getnext().getchildren()[0].text
-        print(f'>>>>  {versionName}')
         with open(f'/tmp/{versionName}', 'w') as f:
             print(etree.tostring(i).decode('utf-8'), file=f)
     return
