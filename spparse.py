@@ -100,7 +100,7 @@ def _formatApplicationsReport(name, version, has64bIntelCode,
     return s
 
 def printApplicationsReport(sp):
-    """For each Application, print name, version, 64b status, path."""
+    """Print the 64b status of every application on the device."
     print(_formatApplicationsReport('Name', 'Version', '64b',
                                     'Path', 'Last Modified'))
     for i in sp['_items']:
@@ -110,19 +110,30 @@ def printApplicationsReport(sp):
                                         i['has64BitIntelCode'],
                                         i['path'], i['lastModified']))
     return
-              
+
+
+# A mishmash of functions.
+# source the data into a string.
 if len(sys.argv) > 1:
     with open(sys.argv[1], 'r') as f:    # system_profiler -xml > foo
         sysprofile = f.read().encode('utf-8')
 else:
     sysprofile = system_profile()
-    
+
+# Write out a file per datatype object.
 splitAndWriteChunks(sysprofile)
 
+# convert to python data structures
 tag, sp = parse(sysprofile)
+
+# Not all objects are identified as searchable by datatype.
+# This may fail on some objects.
 plist = indexByDatatype(sp)
+
+# this is a more reliable index.
 plist = indexByVersionInfo(sp)
 
+# Dump the 64b status of all applications, please.
 applicationsTag = 'com.apple.SystemProfiler.SPApplicationsReporter'
 printApplicationsReport(plist[applicationsTag])
 
