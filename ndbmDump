@@ -1,0 +1,21 @@
+#! /usr/bin/env perl
+
+use strict;
+use warnings;
+
+use File::Basename   qw/basename/;
+my $progname = basename($0);
+my $filename  = shift @ARGV;
+my %kv;
+
+##
+use Fcntl;
+use NDBM_File;
+tie(%kv, 'NDBM_File', $filename, O_RDWR, 0600)
+    or die "tie(\%kv): $!";
+
+while (my($k, $v) = each %kv) {
+    printf("%38s  %38s\n", $k, $v);
+}
+untie %kv;
+exit;
